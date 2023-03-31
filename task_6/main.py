@@ -1,3 +1,172 @@
+class Board:
+    board = list(range(1, 10))
+    def print_board(self):
+        for cell in range(3):
+            print(self.board[0 + cell * 3], self.board[1 + cell * 3], self.board[2 + cell * 3])
+
+class Player:
+    def __init__(self, name, symbol):
+        self.name = name
+        self.symbol = symbol
+    def move(self):
+        valid = False
+        while not valid:
+            player_answer = input(self.name + ' куда поставим ' + self.symbol + '? ')
+            try:
+                player_answer = int(player_answer)
+            except:
+                print('Некорректный ввод числа')
+                continue
+            if 1 <= player_answer <= 9:
+                if str(Board.board[player_answer - 1]) not in 'XO':
+                    Board.board[player_answer - 1] = self.symbol
+                    valid = True
+                else:
+                    print('Эта клетка уже занята')
+            else:
+                print('Некорректно. Введите число от 1 до 9')
+class Win:
+    def __init__(self):
+        self.win_coord = ((0, 1, 2), (3, 4, 5), (6, 7, 8), (0, 3, 6), (1, 4, 7), (2, 5, 8), (0, 4, 8), (2, 4, 6))
+    def check_win(self):
+        for each in self.win_coord:
+            if Board.board[each[0]] == Board.board[each[1]] == Board.board[each[2]]:
+                return Board.board[each[0]]
+        return False
+
+class Game:
+    name_1 = input('Введите имя первого игрока ')
+    name_2 = input('Введите имя второго игрока ')
+    board = Board()
+    def one_move(self):
+        self.board.print_board()
+        Player(self.name_1, 'X').move()
+        self.board.print_board()
+    def one_game(self):
+        counter = 0
+        counter_x = 0
+        counter_o = 0
+        result = Win()
+        while True:
+            self.board.print_board()
+            if counter % 2 == 0:
+                Player(self.name_1, 'X').move()
+                counter_x += 1
+            else:
+                Player(self.name_2, 'O').move()
+                counter_o += 1
+            counter += 1
+            if counter > 4:
+                winner = result.check_win()
+                if winner == 'X':
+                    print(self.name_1, 'выиграл(a)')
+                    return 'X'
+                elif winner == 'O':
+                    print(self.name_2, 'выиграл(a)')
+                    return 'O'
+            if counter == 9:
+                print('Ничья')
+                break
+    def tournament(self):
+        x_wins = 0
+        o_wins = 0
+        win = False
+        while not win:
+            score = self.one_game()
+            if score == 'X':
+                x_wins += 1
+            elif score == 'O':
+                o_wins += 1
+            print('Счет:', x_wins, ':', o_wins)
+            one_more_time = input('Сыграть еще раз? ')
+            if one_more_time == 'yes' or 'да' or 'YES' or 'ДА' or 'Yes' or 'Да' or 'Y' or 'y':
+                continue
+            else:
+                break
+
+mode = 0
+game = Game()
+while True:
+    mode = int(input('Выберите режим игры (1 - один ход, 2 - одна игра, 3 - серия игр) '))
+    if mode == 1:
+        game.one_move()
+        break
+    elif mode == 2:
+        game.one_game()
+        break
+    elif mode == 3:
+        game.tournament()
+        break
+
+# class Board:
+#     board = list(range(1, 10))
+#     def print_board(self):
+#         for cell in range(3):
+#             print(self.board[0 + cell * 3], self.board[1 + cell * 3], self.board[2 + cell * 3])
+#
+# class Player:
+#     def __init__(self, symbol):
+#         self.symbol = symbol
+#     def move(self):
+#         valid = False
+#         while not valid:
+#             player_answer = input('Куда поставим ' + self.symbol + '? ')
+#             try:
+#                 player_answer = int(player_answer)
+#             except:
+#                 print('Некорректный ввод числа')
+#                 continue
+#             if 1 <= player_answer <= 9:
+#                 if str(Board.board[player_answer - 1]) not in 'XO':
+#                     Board.board[player_answer - 1] = self.symbol
+#                     valid = True
+#                 else:
+#                     print('Эта клетка уже занята')
+#             else:
+#                 print('Некорректно. Введите число от 1 до 9')
+#
+# class Win:
+#     def __init__(self):
+#         self.win_coord = ((0, 1, 2), (3, 4, 5), (6, 7, 8), (0, 3, 6), (1, 4, 7), (2, 5, 8), (0, 4, 8), (2, 4, 6))
+#     def check_win(self):
+#         for each in self.win_coord:
+#             if Board.board[each[0]] == Board.board[each[1]] == Board.board[each[2]]:
+#                 return Board.board[each[0]]
+#         return False
+#
+# def game():
+#     board = Board()
+#     result = Win()
+#     counter = 0
+#     counter_x = 0
+#     counter_o = 0
+#     win = False
+#     while not win:
+#         board.print_board()
+#         if counter % 2 == 0:
+#             Player('X').move()
+#             counter_x += 1
+#         else:
+#             Player('O').move()
+#             counter_o += 1
+#         counter += 1
+#         if counter > 4:
+#             winner = result.check_win()
+#             if winner:
+#                 print(winner, 'выиграл(a)')
+#                 return winner
+#         if counter == 9:
+#             print('Ничья')
+#             break
+#     board.print_board()
+#
+# res = game()
+# print(res)
+# input()
+
+
+
+
 # class Board:
 #     def __init__(self):
 #         self.cell = list('0' for _ in range(1, 10))
@@ -117,99 +286,3 @@
 # name = input('Введите имя игрока ')
 # game(name)
 # input('Нажмите Enter для выхода!')
-
-class Board:
-    board = list(range(1, 10))
-    def print_board(self):
-        for cell in range(3):
-            print(self.board[0 + cell * 3], self.board[1 + cell * 3], self.board[2 + cell * 3])
-
-class Player:
-    def __init__(self, name, symbol):
-        self.name = name
-        self.symbol = symbol
-    def move(self):
-        valid = False
-        while not valid:
-            player_answer = input(self.name + ' куда поставим ' + self.symbol + '? ')
-            try:
-                player_answer = int(player_answer)
-            except:
-                print('Некорректный ввод числа')
-                continue
-            if 1 <= player_answer <= 9:
-                if str(Board.board[player_answer - 1]) not in 'XO':
-                    Board.board[player_answer - 1] = self.symbol
-                    valid = True
-                else:
-                    print('Эта клетка уже занята')
-            else:
-                print('Некорректно. Введите число от 1 до 9')
-class Win:
-    def __init__(self):
-        self.win_coord = ((0, 1, 2), (3, 4, 5), (6, 7, 8), (0, 3, 6), (1, 4, 7), (2, 5, 8), (0, 4, 8), (2, 4, 6))
-    def check_win(self):
-        for each in self.win_coord:
-            if Board.board[each[0]] == Board.board[each[1]] == Board.board[each[2]]:
-                return Board.board[each[0]]
-        return False
-
-class Game:
-    name_1 = input('Введите имя первого игрока ')
-    name_2 = input('Введите имя второго игрока ')
-    def one_move(self):
-        board = Board()
-        board.print_board()
-        Player(self.name_1, 'X').move()
-        board.print_board()
-    def one_game(self):
-        board = Board()
-        counter = 0
-        result = Win()
-        while True:
-            board.print_board()
-            if counter % 2 == 0:
-                Player(self.name_1, 'X').move()
-            else:
-                Player(self.name_2, 'O').move()
-            counter += 1
-            if counter > 4:
-                winner = result.check_win()
-                if winner == 'X':
-                    print(self.name_1, 'выиграл(a)')
-                    return 'X'
-                else:
-                    print(self.name_2, 'выиграл(a)')
-                    return 'O'
-            if counter == 9:
-                print('Ничья')
-                break
-    def tournament(self):
-        x_wins = 0
-        o_wins = 0
-        while True:
-            score = self.one_game()
-            if score == 'X':
-                x_wins += 1
-            elif score == 'O':
-                o_wins += 1
-            print('Счет:', x_wins, ':', o_wins)
-            one_more_time = input('Сыграть еще раз? ')
-            if one_more_time == 'yes' or 'да' or 'YES' or 'ДА' or 'Yes' or 'Да' or 'Y' or 'y':
-                continue
-            else:
-                break
-
-mode = 0
-game = Game()
-while True:
-    mode = int(input('Выберите режим игры (1 - один ход, 2 - одна игра, 3 - серия игр) '))
-    if mode == 1:
-        game.one_move()
-        break
-    elif mode == 2:
-        game.one_game()
-        break
-    elif mode == 3:
-        game.tournament()
-        break
